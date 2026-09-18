@@ -9,6 +9,9 @@ PROCESSED_DATA_DIR = PROJECT_ROOT / "data" / "processed"
 
 FEATURES_FILE = PROCESSED_DATA_DIR / "features.csv"
 MODEL_FILE = PROCESSED_DATA_DIR / "isolation_forest_model.joblib"
+ANOMALY_RESULTS_FILE = PROCESSED_DATA_DIR / "anomaly_results.csv"
+INCIDENTS_FILE = PROCESSED_DATA_DIR / "incidents.json"
+ROOT_CAUSE_ANALYSIS_FILE = PROCESSED_DATA_DIR / "root_cause_analysis.json"
 
 FEATURE_COLUMNS = [
     "severity",
