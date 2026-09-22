@@ -1,144 +1,62 @@
-from flask import Flask, jsonify, request, send_from_directory
-from flask_swagger_ui import get_swaggerui_blueprint
-import pandas as pd
+from pathlib import Path
+
 import joblib
-import os
+import pandas as pd
+from fastapi import FastAPI, HTTPException
+from pydantic import BaseModel
+
+from src.ai.gemini_service import GeminiService
+from src.ai.root_cause_analyzer import analyze_root_cause
 
 
-app = Flask(__name__)
+BASE_DIR = Path(__file__).resolve().parents[2]
+MODEL_PATH = BASE_DIR / "data" / "processed" / "isolation_forest_model.joblib"
 
 
-# ============================================================
-# SWAGGER CONFIGURATION
-# ============================================================
-
-SWAGGER_URL = "/docs"
-API_URL = "/swagger.json"
-
-swaggerui_blueprint = get_swaggerui_blueprint(
-    SWAGGER_URL,
-    API_URL,
-    config={
-        "app_name": "AI Log Debugger API"
-    }
+app = FastAPI(
+    title="AI Log Debugger API",
+    description="API for anomaly detection and AI-powered root-cause analysis.",
+    version="1.0.0",
 )
-
-app.register_blueprint(
-    swaggerui_blueprint,
-    url_prefix=SWAGGER_URL
-)
-
-
-# Serve Swagger JSON file
-@app.route("/swagger.json", methods=["GET"])
-def swagger_json():
-    return send_from_directory(
-        os.path.dirname(__file__),
-        "swagger.json"
-    )
-
-
-# ============================================================
-# LOAD ML MODEL
-# ============================================================
-
-MODEL_PATH = "data/processed/isolation_forest_model.joblib"
 
 model = joblib.load(MODEL_PATH)
+gemini_service = GeminiService()
 
-print("ML model loaded successfully!")
+
+class LogFeatures(BaseModel):
+    severity: int
+    is_error: int
+    service_code: int
+    message_length: int
+    time_since_previous: float
+    errors_in_last_minute: int
+    warnings_in_last_minute: int
+    service_error_rate: float
 
 
-# ============================================================
-# HOME
-# ============================================================
-
-@app.route("/", methods=["GET"])
+@app.get("/")
 def home():
-
-    return jsonify({
+    return {
         "message": "AI Log Debugger API is running",
-        "status": "success"
-    })
+        "status": "success",
+    }
 
 
-# ============================================================
-# HEALTH CHECK
-# ============================================================
-
-@app.route("/health", methods=["GET"])
+@app.get("/health")
 def health():
-
-    return jsonify({
-        "status": "healthy"
-    })
-
-
-# ============================================================
-# PREDICTION API
-# ============================================================
-
-@app.route("/predict", methods=["POST"])
-def predict():
-
-    data = request.get_json()
-
-    # Check if input exists
-    if not data:
-
-        return jsonify({
-            "error": "No input data provided"
-        }), 400
+    return {
+        "status": "healthy",
+        "model_loaded": True,
+        "gemini_available": gemini_service.available,
+    }
 
 
-    # Required features
-    required_fields = [
+@app.post("/predict")
+def predict(log: LogFeatures):
 
-        "severity",
-        "is_error",
-        "service_code",
-        "message_length",
-        "time_since_previous",
-        "errors_in_last_minute",
-        "warnings_in_last_minute",
-        "service_error_rate"
-
-    ]
-
-
-    # Check for missing fields
-    missing_fields = [
-
-        field
-        for field in required_fields
-        if field not in data
-
-    ]
-
-
-    if missing_fields:
-
-        return jsonify({
-
-            "error": "Missing fields",
-            "fields": missing_fields
-
-        }), 400
-
-
-    # ========================================================
-    # CREATE DATAFRAME
-    # ========================================================
-
-    input_data = pd.DataFrame([data])
-
-
-    # ========================================================
-    # FEATURES USED BY ML MODEL
-    # ========================================================
+    input_data = pd.DataFrame([log.model_dump()])
 
     feature_columns = [
-
         "severity",
         "is_error",
         "service_code",
@@ -146,103 +64,52 @@ def predict():
         "time_since_previous",
         "errors_in_last_minute",
         "warnings_in_last_minute",
-        "service_error_rate"
-
+        "service_error_rate",
     ]
 
+    try:
+        prediction_value = model.predict(
+            input_data[feature_columns]
+        )[0]
 
-    # ========================================================
-    # ML MODEL PREDICTION
-    # ========================================================
+    except Exception as e:
+        raise HTTPException(
+            status_code=500,
+            detail=f"ML prediction failed: {str(e)}",
+        )
 
-    prediction_value = model.predict(
-        input_data[feature_columns]
-    )[0]
+    ml_anomaly = int(prediction_value == -1)
+    rule_anomaly = int(log.severity >= 1)
+    final_anomaly = int(ml_anomaly == 1 or rule_anomaly == 1)
 
+    prediction = "Anomaly" if final_anomaly else "Normal"
 
-    # Isolation Forest:
-    # -1 = Anomaly
-    #  1 = Normal
-
-    if prediction_value == -1:
-
-        ml_anomaly = 1
-
-    else:
-
-        ml_anomaly = 0
-
-
-    # ========================================================
-    # RULE-BASED ANOMALY DETECTION
-    # ========================================================
-
-    rule_anomaly = int(
-
-        input_data["severity"].iloc[0] >= 1
-
-    )
-
-
-    # ========================================================
-    # HYBRID ANOMALY DETECTION
-    # ========================================================
-
-    final_anomaly = int(
-
-        (ml_anomaly == 1)
-        or
-        (rule_anomaly == 1)
-
-    )
-
-
-    # ========================================================
-    # FINAL PREDICTION
-    # ========================================================
-
-    if final_anomaly == 1:
-
-        prediction = "Anomaly"
-
-    else:
-
-        prediction = "Normal"
-
-
-    severity = input_data["severity"].iloc[0]
-
-
-    # ========================================================
-    # API RESPONSE
-    # ========================================================
-
-    return jsonify({
-
+    return {
         "prediction": prediction,
-
-        "severity": int(severity),
-
-        "ml_prediction":
-            "Anomaly"
-            if ml_anomaly == 1
-            else "Normal",
-
-        "rule_prediction":
-            "Anomaly"
-            if rule_anomaly == 1
-            else "Normal",
-
-        "message":
-            "Prediction generated successfully"
-
-    })
+        "severity": log.severity,
+        "ml_prediction": "Anomaly" if ml_anomaly else "Normal",
+        "rule_prediction": "Anomaly" if rule_anomaly else "Normal",
+        "model_output": int(prediction_value),
+        "message": "Prediction generated successfully",
+    }
 
 
-# ============================================================
-# RUN FLASK SERVER
-# ============================================================
+@app.post("/root-cause")
+def root_cause():
 
-if __name__ == "__main__":
+    try:
+        deterministic_analysis = analyze_root_cause()
+        gemini_analysis = gemini_service.explain_root_cause(
+            deterministic_analysis
+        )
 
-    app.run(host="0.0.0.0", port=5000, debug=True)
+        return {
+            "deterministic_analysis": deterministic_analysis,
+            "ai_analysis": gemini_analysis,
+        }
+
+    except Exception as e:
+        raise HTTPException(
+            status_code=500,
+            detail=f"Root-cause analysis failed: {str(e)}",
+        )

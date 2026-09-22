@@ -1,10 +1,11 @@
-
 import json
 import os
 from typing import Any
 
+from dotenv import load_dotenv
 from google import genai
 
+load_dotenv()
 
 MODEL_NAME = "gemini-3.6-flash"
 
