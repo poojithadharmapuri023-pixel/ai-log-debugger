@@ -15,7 +15,7 @@ import joblib
 import pandas as pd
 from sklearn.ensemble import IsolationForest
 
-from src.detection.anomaly_detector import select_model_features
+from src.analysis.feature_engineering import select_model_features
 from src.ml.constants import (
     FEATURES_FILE,
     ISOLATION_FOREST_CONTAMINATION,

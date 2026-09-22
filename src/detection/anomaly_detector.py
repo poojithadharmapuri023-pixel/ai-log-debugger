@@ -7,26 +7,12 @@ Use ``src.training.train_model`` for the explicit training command and
 
 from __future__ import annotations
 
-import pandas as pd
-
 try:
-    from src.ml.constants import FEATURE_COLUMNS
+    from src.analysis.feature_engineering import select_model_features
 except ModuleNotFoundError:  # Supports running legacy scripts from ``src``.
-    from ml.constants import FEATURE_COLUMNS
+    from analysis.feature_engineering import select_model_features
 
-
-def select_model_features(dataframe: pd.DataFrame) -> pd.DataFrame:
-    """Return the model features in the exact order used during training."""
-    missing_columns = [
-        column for column in FEATURE_COLUMNS if column not in dataframe.columns
-    ]
-    if missing_columns:
-        raise ValueError(
-            "Feature data is missing required columns: "
-            + ", ".join(missing_columns)
-        )
-
-    return dataframe.loc[:, FEATURE_COLUMNS].copy()
+import pandas as pd
 
 
 def predict_anomalies(model, dataframe: pd.DataFrame) -> pd.DataFrame:

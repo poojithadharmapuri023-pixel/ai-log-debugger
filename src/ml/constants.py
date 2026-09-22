@@ -24,6 +24,24 @@ FEATURE_COLUMNS = [
     "service_error_rate",
 ]
 
+SEVERITY_CODE_MAP = {
+    "INFO": 0,
+    "WARNING": 1,
+    "ERROR": 2,
+    "CRITICAL": 3,
+}
+ERROR_LEVELS = frozenset({"ERROR", "CRITICAL"})
+WARNING_LEVEL = "WARNING"
+
+# These codes are the category encoding used by the existing feature dataset
+# and trained model. Do not change them without retraining the model.
+SERVICE_CODE_MAP = {
+    "api-gateway": 0,
+    "auth-service": 1,
+    "database-service": 2,
+    "payment-service": 3,
+}
+
 ISOLATION_FOREST_CONTAMINATION = 0.3
 ISOLATION_FOREST_RANDOM_STATE = 42
 ANOMALY_MODEL_OUTPUT = -1
