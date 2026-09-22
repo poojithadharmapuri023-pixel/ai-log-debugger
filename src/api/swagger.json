@@ -1,0 +1,109 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "title": "AI Log Debugger API",
+    "description": "API for automated log anomaly detection and root cause analysis",
+    "version": "1.0.0"
+  },
+  "host": "127.0.0.1:5000",
+  "basePath": "/",
+  "schemes": [
+    "http"
+  ],
+  "paths": {
+    "/": {
+      "get": {
+        "summary": "API Home",
+        "responses": {
+          "200": {
+            "description": "API is running"
+          }
+        }
+      }
+    },
+    "/health": {
+      "get": {
+        "summary": "Health Check",
+        "responses": {
+          "200": {
+            "description": "API health status"
+          }
+        }
+      }
+    },
+    "/predict": {
+      "post": {
+        "summary": "Detect Log Anomaly",
+        "description": "Predicts whether a log entry is normal or anomalous using the hybrid ML detection system.",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "log_data",
+            "required": true,
+            "schema": {
+              "type": "object",
+              "required": [
+                "severity",
+                "is_error",
+                "service_code",
+                "message_length",
+                "time_since_previous",
+                "errors_in_last_minute",
+                "warnings_in_last_minute",
+                "service_error_rate"
+              ],
+              "properties": {
+                "severity": {
+                  "type": "integer",
+                  "example": 2
+                },
+                "is_error": {
+                  "type": "integer",
+                  "example": 1
+                },
+                "service_code": {
+                  "type": "integer",
+                  "example": 2
+                },
+                "message_length": {
+                  "type": "integer",
+                  "example": 27
+                },
+                "time_since_previous": {
+                  "type": "number",
+                  "example": 2.0
+                },
+                "errors_in_last_minute": {
+                  "type": "integer",
+                  "example": 0
+                },
+                "warnings_in_last_minute": {
+                  "type": "integer",
+                  "example": 2
+                },
+                "service_error_rate": {
+                  "type": "number",
+                  "example": 0.285714
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Prediction generated successfully"
+          },
+          "400": {
+            "description": "Invalid or missing input"
+          }
+        }
+      }
+    }
+  }
+}

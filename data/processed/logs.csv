@@ -1,0 +1,21 @@
+timestamp,service,level,message
+2026-09-02 10:15:01,auth-service,INFO,User login successful
+2026-09-02 10:15:03,payment-service,INFO,Payment request received
+2026-09-02 10:15:04,payment-service,INFO,Payment processing started
+2026-09-02 10:15:05,database-service,INFO,Database query executed successfully
+2026-09-02 10:15:07,payment-service,INFO,Payment completed successfully
+2026-09-02 10:20:11,auth-service,INFO,User login successful
+2026-09-02 10:20:15,payment-service,INFO,Payment request received
+2026-09-02 10:20:16,database-service,WARNING,Database response time increased
+2026-09-02 10:20:18,database-service,WARNING,Database connection pool usage high
+2026-09-02 10:20:20,database-service,ERROR,Database connection timeout
+2026-09-02 10:20:21,payment-service,ERROR,Payment processing failed
+2026-09-02 10:20:22,payment-service,ERROR,Unable to connect to database
+2026-09-02 10:20:23,api-gateway,ERROR,HTTP 500 returned for payment request
+2026-09-02 10:20:24,payment-service,ERROR,Payment request failed
+2026-09-02 10:20:25,database-service,CRITICAL,Database service unavailable
+2026-09-02 10:21:01,payment-service,ERROR,Multiple payment requests failing
+2026-09-02 10:21:15,database-service,INFO,Database service restarted
+2026-09-02 10:21:18,database-service,INFO,Database connection restored
+2026-09-02 10:21:20,payment-service,INFO,Payment processing resumed
+2026-09-02 10:21:22,api-gateway,INFO,HTTP 200 returned for payment request

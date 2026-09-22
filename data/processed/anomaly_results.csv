@@ -1,0 +1,21 @@
+timestamp,service,level,message,severity,is_error,service_code,message_length,time_since_previous,minute,errors_in_last_minute,is_warning,warnings_in_last_minute,service_error_rate,anomaly,actual_anomaly,predicted_anomaly,rule_anomaly,final_anomaly
+2026-09-02 10:15:01,auth-service,INFO,User login successful,0,0,1,21,0.0,2026-09-02 10:15:00,0,0,0,0.0,1,0,0,0,0
+2026-09-02 10:15:03,payment-service,INFO,Payment request received,0,0,3,24,2.0,2026-09-02 10:15:00,0,0,0,0.4444444444444444,1,0,0,0,0
+2026-09-02 10:15:04,payment-service,INFO,Payment processing started,0,0,3,26,1.0,2026-09-02 10:15:00,0,0,0,0.4444444444444444,1,0,0,0,0
+2026-09-02 10:15:05,database-service,INFO,Database query executed successfully,0,0,2,36,1.0,2026-09-02 10:15:00,0,0,0,0.2857142857142857,1,0,0,0,0
+2026-09-02 10:15:07,payment-service,INFO,Payment completed successfully,0,0,3,30,2.0,2026-09-02 10:15:00,0,0,0,0.4444444444444444,1,0,0,0,0
+2026-09-02 10:20:11,auth-service,INFO,User login successful,0,0,1,21,304.0,2026-09-02 10:20:00,0,0,0,0.0,-1,0,1,0,1
+2026-09-02 10:20:15,payment-service,INFO,Payment request received,0,0,3,24,4.0,2026-09-02 10:20:00,0,0,0,0.4444444444444444,1,0,0,0,0
+2026-09-02 10:20:16,database-service,WARNING,Database response time increased,1,0,2,32,1.0,2026-09-02 10:20:00,0,1,0,0.2857142857142857,1,1,0,1,1
+2026-09-02 10:20:18,database-service,WARNING,Database connection pool usage high,1,0,2,35,2.0,2026-09-02 10:20:00,0,1,1,0.2857142857142857,1,1,0,1,1
+2026-09-02 10:20:20,database-service,ERROR,Database connection timeout,2,1,2,27,2.0,2026-09-02 10:20:00,0,0,2,0.2857142857142857,1,1,0,1,1
+2026-09-02 10:20:21,payment-service,ERROR,Payment processing failed,2,1,3,25,1.0,2026-09-02 10:20:00,1,0,2,0.4444444444444444,1,1,0,1,1
+2026-09-02 10:20:22,payment-service,ERROR,Unable to connect to database,2,1,3,29,1.0,2026-09-02 10:20:00,2,0,2,0.4444444444444444,1,1,0,1,1
+2026-09-02 10:20:23,api-gateway,ERROR,HTTP 500 returned for payment request,2,1,0,37,1.0,2026-09-02 10:20:00,3,0,2,0.5,-1,1,1,1,1
+2026-09-02 10:20:24,payment-service,ERROR,Payment request failed,2,1,3,22,1.0,2026-09-02 10:20:00,4,0,2,0.4444444444444444,-1,1,1,1,1
+2026-09-02 10:20:25,database-service,CRITICAL,Database service unavailable,3,1,2,28,1.0,2026-09-02 10:20:00,5,0,2,0.2857142857142857,-1,1,1,1,1
+2026-09-02 10:21:01,payment-service,ERROR,Multiple payment requests failing,2,1,3,33,36.0,2026-09-02 10:21:00,0,0,0,0.4444444444444444,-1,1,1,1,1
+2026-09-02 10:21:15,database-service,INFO,Database service restarted,0,0,2,26,14.0,2026-09-02 10:21:00,1,0,0,0.2857142857142857,1,0,0,0,0
+2026-09-02 10:21:18,database-service,INFO,Database connection restored,0,0,2,28,3.0,2026-09-02 10:21:00,1,0,0,0.2857142857142857,1,0,0,0,0
+2026-09-02 10:21:20,payment-service,INFO,Payment processing resumed,0,0,3,26,2.0,2026-09-02 10:21:00,1,0,0,0.4444444444444444,1,0,0,0,0
+2026-09-02 10:21:22,api-gateway,INFO,HTTP 200 returned for payment request,0,0,0,37,2.0,2026-09-02 10:21:00,1,0,0,0.5,-1,0,1,0,1

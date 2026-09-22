@@ -1,0 +1,66 @@
+[
+    {
+        "incident_id": 1,
+        "severity": "CRITICAL",
+        "services": [
+            "database-service",
+            "payment-service",
+            "api-gateway"
+        ],
+        "event_count": 6,
+        "events": [
+            {
+                "timestamp": "2026-09-02 10:20:20",
+                "service": "database-service",
+                "level": "ERROR",
+                "message": "Database connection timeout"
+            },
+            {
+                "timestamp": "2026-09-02 10:20:21",
+                "service": "payment-service",
+                "level": "ERROR",
+                "message": "Payment processing failed"
+            },
+            {
+                "timestamp": "2026-09-02 10:20:22",
+                "service": "payment-service",
+                "level": "ERROR",
+                "message": "Unable to connect to database"
+            },
+            {
+                "timestamp": "2026-09-02 10:20:23",
+                "service": "api-gateway",
+                "level": "ERROR",
+                "message": "HTTP 500 returned for payment request"
+            },
+            {
+                "timestamp": "2026-09-02 10:20:24",
+                "service": "payment-service",
+                "level": "ERROR",
+                "message": "Payment request failed"
+            },
+            {
+                "timestamp": "2026-09-02 10:20:25",
+                "service": "database-service",
+                "level": "CRITICAL",
+                "message": "Database service unavailable"
+            }
+        ]
+    },
+    {
+        "incident_id": 2,
+        "severity": "HIGH",
+        "services": [
+            "payment-service"
+        ],
+        "event_count": 1,
+        "events": [
+            {
+                "timestamp": "2026-09-02 10:21:01",
+                "service": "payment-service",
+                "level": "ERROR",
+                "message": "Multiple payment requests failing"
+            }
+        ]
+    }
+]
