@@ -20,14 +20,16 @@ TraceRoot AI analyzes application logs to detect anomalous events, identify affe
 ## 📸 Dashboard Preview
 
 ### Main Dashboard
-![TraceRoot AI Dashboard](screenshots/dashboard.png)
+
+<img src="./screenshots/dashboard.png" alt="TraceRoot AI Dashboard" width="900"/>
 
 ### Anomaly Detection
-![Anomaly Detection](screenshots/anomalies.png)
+
+<img src="./screenshots/anomalies.png" alt="TraceRoot AI Anomaly Detection" width="900"/>
 
 ### Root-Cause Analysis
-![Root-Cause Analysis](screenshots/root-cause.png)
 
+<img src="./screenshots/root-cause.png" alt="TraceRoot AI Root-Cause Analysis" width="900"/>
 
 ## 🏗️ Architecture
 
