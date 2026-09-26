@@ -48,6 +48,7 @@ def _cors_origins() -> list[str]:
         ]
 
     return [
+        "https://traceroot-ai-dashboard.onrender.com",
         "http://localhost:5500",
         "http://127.0.0.1:5500",
         "http://localhost:3000",
