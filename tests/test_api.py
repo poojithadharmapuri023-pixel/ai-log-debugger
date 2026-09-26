@@ -207,3 +207,20 @@ def test_predict_response_fields():
     assert body["prediction"] in {"Anomaly", "Normal"}
     assert body["ml_prediction"] in {"Anomaly", "Normal"}
     assert body["rule_prediction"] in {"Anomaly", "Normal"}
+
+
+def test_predict_rejects_invalid_payload():
+    payload = {
+        "severity": 2,
+        "is_error": 1,
+        "service_code": 2,
+        "message_length": 45,
+        "time_since_previous": 10.0,
+        "errors_in_last_minute": 3,
+        # warnings_in_last_minute is intentionally missing
+        "service_error_rate": 0.5,
+    }
+
+    response = client.post("/predict", json=payload)
+
+    assert response.status_code == 422
