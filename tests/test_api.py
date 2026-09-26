@@ -259,3 +259,25 @@ def test_root_response_fields():
 
     assert body["status"] == "success"
     assert body["message"] == "AI Log Debugger API is running"
+
+def test_predict_normal_severity_response():
+    payload = {
+        "severity": 0,
+        "is_error": 0,
+        "service_code": 1,
+        "message_length": 20,
+        "time_since_previous": 30.0,
+        "errors_in_last_minute": 0,
+        "warnings_in_last_minute": 0,
+        "service_error_rate": 0.0,
+    }
+
+    response = client.post("/predict", json=payload)
+
+    assert response.status_code == 200
+
+    body = response.json()
+
+    assert body["severity"] == 0
+    assert body["rule_prediction"] == "Normal"
+    assert body["prediction"] in {"Normal", "Anomaly"}
