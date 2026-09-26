@@ -74,3 +74,14 @@ def test_root_cause():
         data["deterministic_analysis"]["root_cause_service"]
         == "database-service"
     )
+
+def test_root_endpoint():
+    response = client.get("/")
+
+    assert response.status_code == 200
+
+    body = response.json()
+
+    assert isinstance(body, dict)
+    assert "message" in body
+
