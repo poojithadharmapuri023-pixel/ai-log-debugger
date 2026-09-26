@@ -235,3 +235,16 @@ def test_root_cause_response_fields():
 
     assert "deterministic_analysis" in body
     assert "ai_analysis" in body
+
+
+def test_root_cause_analysis_content():
+    response = client.post("/root-cause")
+
+    assert response.status_code == 200
+
+    body = response.json()
+
+    assert isinstance(body["deterministic_analysis"], dict)
+    assert body["deterministic_analysis"]
+
+    assert body["ai_analysis"] is not None
