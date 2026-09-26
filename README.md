@@ -1,355 +1,278 @@
-# AI Log Debugger & Root Cause Analyzer
+# TraceRoot AI
 
-An AI-assisted incident debugging system that analyzes application logs, detects anomalous events, identifies probable root causes, and generates structured explanations using Google Gemini.
+### AI-Powered Incident Intelligence & Root-Cause Analysis
 
-## Overview
+TraceRoot AI is an AI/ML-powered incident intelligence platform that analyzes application logs, detects anomalous events, correlates failures across services, and identifies the most likely root cause of an incident.
 
-Modern applications generate large volumes of logs during failures. Manually investigating these logs can be time-consuming because developers need to determine:
+It combines **machine-learning anomaly detection**, **rule-based analysis**, **incident correlation**, and a **FastAPI backend** with a dark enterprise-style observability dashboard.
 
-- What went wrong?
-- When did the problem begin?
-- Which services were affected?
-- Which event was likely the initial failure?
-- What should be investigated next?
+---
 
-**AI Log Debugger & Root Cause Analyzer** automates several of these steps through a Python-based processing and analysis pipeline.
+## 🚀 What TraceRoot AI Does
 
-The system combines:
+TraceRoot AI helps answer three key questions:
 
-- Log preprocessing and feature engineering
-- Machine-learning-based anomaly detection
-- Rule-based anomaly detection
-- Incident and event correlation
-- Deterministic root-cause analysis
-- Google Gemini-based root-cause explanation
-- FastAPI REST endpoints
-- Docker-based deployment
-- Automated API and data-processing tests
+> **What went wrong?**
+> **Which events are anomalous?**
+> **What service most likely caused the incident?**
 
-## System Workflow
+The platform processes application log events and provides:
 
-```text
-Application Logs
-       |
-       v
-Log Preprocessing
-       |
-       v
-Feature Engineering
-       |
-       v
-Anomaly Detection
-   |           |
-   |           +--> Rule-based detection
-   |
-   +--------------> Isolation Forest
-       |
-       v
-Incident / Event Analysis
-       |
-       v
-Deterministic Root-Cause Analysis
-       |
-       v
-Google Gemini Explanation
-       |
-       v
-FastAPI API
-       |
-       v
-Structured Incident Analysis
-```
+* Real-time anomaly prediction
+* ML-based anomaly detection
+* Rule-based anomaly detection
+* Incident analysis
+* Cross-service event correlation
+* Deterministic root-cause analysis
+* Historical event exploration
+* Backend health monitoring
+* API documentation through Swagger
+* Interactive observability dashboard
 
-## Key Features
+---
 
-### 1. Log Processing
+## ✨ Key Features
 
-The system processes application log entries and extracts useful information such as:
+### 🔍 Anomaly Detection
 
-- Timestamp
-- Log level
-- Service
-- Message
-- Error information
-- Warning information
+Analyze an individual event using the trained anomaly detection model.
 
-The processed logs are converted into structured data for downstream analysis.
+The detection engine uses features such as:
 
-### 2. Feature Engineering
+* Severity
+* Error status
+* Service code
+* Message length
+* Time since previous event
+* Errors in the last minute
+* Warnings in the last minute
+* Service error rate
 
-The anomaly detection pipeline generates features including:
+The system provides:
 
-```text
-severity
-is_error
-service_code
-message_length
-time_since_previous
-errors_in_last_minute
-warnings_in_last_minute
-service_error_rate
-```
+* Final prediction
+* ML prediction
+* Rule prediction
+* Model output
+* Detection context
 
-These features are used by the machine-learning model to identify unusual events.
+---
 
-### 3. Anomaly Detection
+### 🧠 Root-Cause Analysis
 
-The project uses **Isolation Forest** for unsupervised anomaly detection.
+TraceRoot AI analyzes stored incident evidence and identifies the service most likely responsible for the incident.
 
-A hybrid detection approach is also implemented:
+The analysis considers:
 
-```text
-Isolation Forest prediction
-            +
-Severity-based rule
-            |
-            v
-      Final prediction
-```
+* Event chronology
+* Service-level failures
+* Error and warning counts
+* Critical events
+* First observed problem
+* Downstream service failures
 
-This allows high-severity events to be flagged even when the machine-learning model does not classify them as anomalies.
+For the included sample incident, the analysis identifies:
 
-### 4. Root-Cause Analysis
+**database-service**
 
-The system analyzes warning, error, and critical events to determine the service associated with the earliest significant problem.
+as the earliest source of the failure chain.
 
-For the included sample dataset, the deterministic analysis identifies:
+---
 
-```text
-Root Cause Service:
-database-service
-```
+### 📋 Event Analyzer
 
-The analysis also provides:
+The Event Analyzer provides an interactive view of stored log events.
 
-- First problem timestamp
-- First problem log level
-- First problem message
-- Service-level event statistics
-- Severity scores
-- Confidence information
-- Reasoning behind the identified root cause
+Users can filter events by:
 
-### 5. AI-Assisted Explanation
+* Search term
+* Service
+* Log level
+* Anomaly status
 
-Google Gemini is used to transform the structured root-cause analysis into an understandable incident explanation.
+The dashboard also supports anomaly-only analysis.
 
-The generated analysis includes:
+---
 
-- Probable root cause
-- Affected services
-- Evidence
-- Impact
-- Recommended investigation steps
+### 📊 Incident Intelligence Dashboard
 
-The application also includes a deterministic fallback when Gemini is unavailable.
+The Overview dashboard provides a high-level operational view containing:
 
-### 6. FastAPI Backend
+* API status
+* ML model status
+* Gemini availability
+* Active incidents
+* Detected anomalies
+* Critical events
+* Affected services
+* Root-cause status
 
-The application exposes the analysis through REST API endpoints.
+All displayed dashboard metrics are retrieved from the backend rather than hard-coded into the UI.
 
-Current endpoints include:
+---
 
-| Method | Endpoint | Purpose |
-|--------|----------|---------|
-| GET | `/` | API status |
-| GET | `/health` | Health and model status |
-| POST | `/predict` | Detect anomaly from log features |
-| POST | `/root-cause` | Run root-cause analysis and AI explanation |
+### 🔌 FastAPI Backend
 
-FastAPI also provides interactive API documentation through:
+TraceRoot AI exposes a REST API for prediction, analysis, health monitoring, and dashboard data.
+
+Interactive API documentation is available through FastAPI Swagger.
+
+---
+
+## 🏗️ Architecture
 
 ```text
-/docs
+                    ┌─────────────────────────┐
+                    │     Application Logs    │
+                    └────────────┬────────────┘
+                                 │
+                                 ▼
+                    ┌─────────────────────────┐
+                    │   Log Preprocessing     │
+                    │  Cleaning & Features    │
+                    └────────────┬────────────┘
+                                 │
+                                 ▼
+                    ┌─────────────────────────┐
+                    │   ML Anomaly Detection  │
+                    │     Isolation Forest    │
+                    └────────────┬────────────┘
+                                 │
+                         ┌───────┴────────┐
+                         ▼                ▼
+                ┌────────────────┐  ┌───────────────┐
+                │ Rule Detection  │  │ ML Prediction │
+                └────────┬───────┘  └───────┬───────┘
+                         │                  │
+                         └────────┬─────────┘
+                                  ▼
+                    ┌─────────────────────────┐
+                    │   Incident Correlation  │
+                    └────────────┬────────────┘
+                                 │
+                                 ▼
+                    ┌─────────────────────────┐
+                    │ Deterministic Root-Cause│
+                    │       Analysis          │
+                    └────────────┬────────────┘
+                                 │
+                                 ▼
+                    ┌─────────────────────────┐
+                    │       FastAPI API        │
+                    └────────────┬────────────┘
+                                 │
+                                 ▼
+                    ┌─────────────────────────┐
+                    │   TraceRoot AI Dashboard │
+                    │      HTML/CSS/JS         │
+                    └─────────────────────────┘
 ```
 
-and the OpenAPI specification through:
+---
+
+## 🤖 Machine Learning
+
+The anomaly detection component uses an **Isolation Forest** model.
+
+The current model is trained using engineered log-event features and is designed to identify unusual combinations of event characteristics.
+
+### Model
 
 ```text
-/openapi.json
+Algorithm: Isolation Forest
+Contamination: 0.3
+Random State: 42
 ```
 
-## Example Prediction
+The system also combines ML predictions with deterministic severity-based rules to provide a hybrid anomaly signal.
 
-A request containing an error event can produce:
+---
 
-```json
-{
-  "prediction": "Anomaly",
-  "severity": 1,
-  "ml_prediction": "Anomaly",
-  "rule_prediction": "Anomaly",
-  "model_output": -1,
-  "message": "Prediction generated successfully"
-}
-```
+## 🛠️ Tech Stack
 
-Where:
+### Backend
+
+* Python
+* FastAPI
+* Pydantic
+* Uvicorn
+
+### Machine Learning
+
+* Scikit-learn
+* Isolation Forest
+* Joblib
+* Pandas
+* NumPy
+
+### Frontend
+
+* HTML5
+* CSS3
+* JavaScript
+* REST API integration
+
+### Development
+
+* Git
+* GitHub
+* VS Code
+* Swagger / OpenAPI
+
+---
+
+## 📁 Project Structure
 
 ```text
--1 = Isolation Forest anomaly
- 1 = Isolation Forest normal
-```
-
-## Root-Cause Analysis Example
-
-For the included sample logs, the analysis identifies `database-service` as the probable initial source of the incident.
-
-The sequence is approximately:
-
-```text
-database-service
-    |
-    | Database response time increased
-    v
-payment-service
-    |
-    | Multiple errors
-    v
-api-gateway
-```
-
-Gemini then produces a structured explanation describing the evidence, affected services, impact, and recommended investigation steps.
-
-## Machine Learning Model
-
-The project uses:
-
-**Algorithm:** Isolation Forest
-
-**Configuration:**
-
-```text
-contamination = 0.3
-random_state = 42
-```
-
-The trained model is stored locally as:
-
-```text
-data/processed/isolation_forest_model.joblib
-```
-
-The project also stores processed logs, engineered features, anomaly results, incident information, and root-cause analysis artifacts under:
-
-```text
-data/processed/
-```
-
-## Testing
-
-The project includes automated tests covering the API, preprocessing, feature engineering, validation, and data-layer behavior.
-
-Current test result:
-
-```text
-16 passed
-1 warning
-```
-
-Tests include:
-
-- Health endpoint
-- Anomaly prediction
-- Normal prediction
-- Root-cause endpoint
-- Prediction validation
-- Pagination and filtering
-- Missing artifact handling
-- Log parsing
-- Malformed log handling
-- Severity encoding
-- Service encoding
-- Message length calculation
-- Time-based features
-- Rolling error/warning counts
-- Service error rate
-- Final feature ordering
-
-Run the tests with:
-
-```powershell
-python -m pytest -v
-```
-
-## Technology Stack
-
-| Technology | Purpose |
-|------------|---------|
-| Python | Core development |
-| Pandas | Log processing and data manipulation |
-| NumPy | Numerical operations |
-| Scikit-learn | Machine learning and anomaly detection |
-| FastAPI | REST API |
-| Pydantic | API request validation |
-| Joblib | Model persistence |
-| Google Gemini API | AI-assisted analysis |
-| Pytest | Automated testing |
-| Docker | Application containerization |
-| Git & GitHub | Version control |
-
-## Project Structure
-
-```text
-ai-log-debugger/
-|
+traceroot-ai/
+│
 ├── data/
 │   ├── raw/
-│   │   └── application.log
 │   └── processed/
-│       ├── logs_clean.csv
-│       ├── features.csv
-│       ├── anomaly_results.csv
-│       ├── incidents.json
-│       ├── root_cause_analysis.json
-│       └── isolation_forest_model.joblib
-|
+│
 ├── src/
-│   ├── ai/
-│   │   ├── gemini_service.py
-│   │   └── root_cause_analyzer.py
 │   ├── analysis/
 │   ├── api/
-│   │   └── app.py
 │   ├── correlation/
-│   ├── data/
 │   ├── ml/
-│   └── main.py
-|
-├── tests/
-│   ├── test_api.py
-│   ├── test_api_data_layer.py
-│   └── test_preprocessing_features.py
-|
+│   └── processing/
+│
 ├── ui/
-|
-├── Dockerfile
-├── .dockerignore
-├── .gitignore
-├── requirements.txt
+│   ├── index.html
+│   ├── styles.css
+│   └── app.js
+│
+├── tests/
+│
 ├── run.py
+├── Dockerfile
+├── requirements.txt
 └── README.md
 ```
 
-## Running Locally
+---
+
+## ⚡ Getting Started
 
 ### 1. Clone the repository
 
-```powershell
-git clone https://github.com/poojithadharmapuri023-pixel/ai-log-debugger.git
-cd ai-log-debugger
+```bash
+git clone https://github.com/poojithadharmapuri023-pixel/traceroot-ai.git
+cd traceroot-ai
 ```
 
-### 2. Create and activate a virtual environment
+### 2. Create a virtual environment
+
+Windows:
 
 ```powershell
 python -m venv venv
 ```
 
-Windows PowerShell:
+Activate it:
 
 ```powershell
-.\venv\Scripts\Activate.ps1
+venv\Scripts\activate
 ```
 
 ### 3. Install dependencies
@@ -358,129 +281,179 @@ Windows PowerShell:
 pip install -r requirements.txt
 ```
 
-### 4. Configure Gemini
-
-Create a `.env` file in the project root:
-
-```text
-GEMINI_API_KEY=your_api_key_here
-```
-
-Do not commit the `.env` file to GitHub.
-
-### 5. Start the API
+### 4. Start the backend
 
 ```powershell
-uvicorn src.api.app:app --reload --port 8000
+python -m uvicorn src.api.main:app --reload --port 8000
 ```
 
 The API will be available at:
 
 ```text
-http://127.0.0.1:8000
+http://localhost:8000
 ```
 
-Interactive API documentation:
+Swagger documentation:
 
 ```text
 http://127.0.0.1:8000/docs
 ```
 
-## Running with Docker
+### 5. Start the dashboard
 
-Build the Docker image:
-
-```powershell
-docker build -t ai-log-debugger .
-```
-
-Run the container:
+Open another terminal:
 
 ```powershell
-docker run -d --name ai-log-debugger-docker -p 8001:8000 --env-file .env ai-log-debugger
+cd ui
+python -m http.server 5500
 ```
 
-The API will then be available at:
+Open:
 
 ```text
-http://127.0.0.1:8001
+http://localhost:5500
 ```
 
-Health check:
+---
+
+## 🔗 API Endpoints
+
+| Method | Endpoint                          | Purpose                      |
+| ------ | --------------------------------- | ---------------------------- |
+| GET    | `/`                               | API information              |
+| GET    | `/health`                         | Backend and artifact health  |
+| POST   | `/predict`                        | Legacy anomaly prediction    |
+| POST   | `/api/v1/predict`                 | Hybrid anomaly prediction    |
+| GET    | `/api/v1/anomalies`               | Retrieve analyzed events     |
+| GET    | `/api/v1/incidents`               | Retrieve incidents           |
+| GET    | `/api/v1/incidents/{incident_id}` | Retrieve an incident         |
+| GET    | `/api/v1/root-cause-analysis`     | Retrieve root-cause analysis |
+| GET    | `/api/v1/metrics`                 | Retrieve dashboard metrics   |
+
+---
+
+## 🧪 Example Detection Request
+
+```json
+{
+  "severity": 2,
+  "is_error": 1,
+  "service_code": 2,
+  "message_length": 45,
+  "time_since_previous": 10,
+  "errors_in_last_minute": 3,
+  "warnings_in_last_minute": 1,
+  "service_error_rate": 0.5
+}
+```
+
+Example response:
+
+```json
+{
+  "prediction": "Anomaly",
+  "ml_prediction": "Anomaly",
+  "rule_prediction": "Anomaly"
+}
+```
+
+---
+
+## 📈 Sample Incident
+
+The included sample dataset contains:
+
+* **20** analyzed events
+* **11** detected anomalies
+* **1** critical event
+* **4** affected services
+* **2** recorded incidents
+
+The primary root cause identified from the stored incident evidence is:
 
 ```text
-http://127.0.0.1:8001/health
+database-service
 ```
 
-## Security
+The analysis identifies the database service's earliest problem event before subsequent payment-service and API-gateway failures.
 
-API credentials are kept outside the source code using environment variables.
+---
 
-The project includes:
+## 🖥️ Dashboard Pages
 
-```text
-.env
-```
+TraceRoot AI includes:
 
-in `.gitignore`, and `.env` is also excluded from the Docker build context through `.dockerignore`.
+### Overview
 
-API keys should never be committed to the repository.
+High-level incident and system intelligence.
 
-## Current Project Status
+### Detection
 
-### Completed
+Manual event anomaly prediction.
 
-- [x] Project structure
-- [x] Log preprocessing
-- [x] Feature engineering
-- [x] Isolation Forest anomaly detection
-- [x] Hybrid anomaly detection
-- [x] Incident/event analysis
-- [x] Deterministic root-cause analysis
-- [x] Google Gemini integration
-- [x] FastAPI backend
-- [x] API validation
-- [x] Automated tests
-- [x] Docker configuration
-- [x] Local Docker deployment
-- [x] Environment-variable based API key configuration
+### Root Cause
 
-### Remaining / Future Work
+Evidence-based incident root-cause analysis.
 
-- [ ] Interactive dashboard
-- [ ] Additional log datasets and failure scenarios
-- [ ] More extensive model evaluation
-- [ ] CI/CD pipeline
-- [ ] Cloud deployment
-- [ ] Production-scale log ingestion
-- [ ] Additional observability integrations
+### Event Analyzer
 
-## Future Vision
+Searchable and filterable event analysis.
 
-The long-term goal is to evolve the project into an AI-assisted incident investigation platform capable of processing application logs and producing a structured incident report containing:
+### API
 
-```text
-Detected anomalies
-       +
-Related events
-       +
-Affected services
-       +
-Probable root cause
-       +
-Evidence
-       +
-Impact
-       +
-Recommended investigation steps
-```
+Live backend endpoint information and Swagger access.
 
-The project is intended as a practical exploration of **Artificial Intelligence, Machine Learning, backend engineering, and automated software debugging**.
+### System
 
-## Author
+Backend, ML model, CORS, and artifact health monitoring.
+
+---
+
+## ⚠️ Current Limitations
+
+* The current project uses a sample log dataset.
+* The current root-cause explanation is deterministic and evidence-based.
+* Gemini-generated narrative output is not currently exposed by the backend dashboard API.
+* Production-scale distributed tracing and streaming ingestion are not yet implemented.
+
+---
+
+## 🔮 Future Improvements
+
+Potential future improvements include:
+
+* Real-time log streaming
+* Kafka-based ingestion
+* Distributed tracing integration
+* Larger production datasets
+* Advanced incident clustering
+* Transformer-based log representations
+* LLM-powered investigation summaries
+* Automated remediation suggestions
+* Dockerized deployment
+* Cloud deployment
+* Authentication and role-based access
+* Monitoring and evaluation dashboards
+
+---
+
+## 🎯 Project Goal
+
+TraceRoot AI was built to explore how machine learning and intelligent incident analysis can reduce the time required to detect, investigate, and understand application failures.
+
+The project focuses on combining **ML detection + deterministic evidence + service correlation** into one operational workflow.
+
+---
+
+## 👩‍💻 Author
 
 **Poojitha Dharmapuri**
 
-B.Tech Computer Science and Engineering  
-Methodist College of Engineering & Technology  
-Osmania University
+B.Tech Computer Science Engineering
+Methodist College of Engineering & Technology, Osmania University
+
+GitHub:
+https://github.com/poojithadharmapuri023-pixel
+
+LinkedIn:
+https://www.linkedin.com/in/poojitha-dharmapuri-648a2b3b7/
