@@ -98,3 +98,12 @@ def test_openapi_documentation():
     assert body["info"]["version"] == "1.0.0"
     assert "/health" in body["paths"]    
 
+def test_health_endpoint():
+    response = client.get("/health")
+
+    assert response.status_code == 200
+
+    body = response.json()
+
+    assert isinstance(body, dict)
+    assert body["status"] == "healthy"
