@@ -298,3 +298,12 @@ def test_predict_rejects_invalid_field_type():
     response = client.post("/predict", json=payload)
 
     assert response.status_code == 422
+
+def test_openapi_api_title():
+    response = client.get("/openapi.json")
+
+    assert response.status_code == 200
+
+    body = response.json()
+
+    assert body["info"]["title"] == "AI Log Debugger API"
