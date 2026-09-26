@@ -122,4 +122,10 @@ def test_health_returns_json():
 
     assert response.status_code == 200
     assert response.headers["content-type"].startswith("application/json")
-    assert isinstance(response.json(), dict)       
+    assert isinstance(response.json(), dict)
+
+def test_docs_endpoint():
+    response = client.get("/docs")
+
+    assert response.status_code == 200
+    assert "text/html" in response.headers["content-type"]
