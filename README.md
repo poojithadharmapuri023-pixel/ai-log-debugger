@@ -1,46 +1,68 @@
 # TraceRoot AI
 
-### AI-Powered Incident Intelligence & Root-Cause Analysis
+TraceRoot AI is an AI-assisted log analysis and incident investigation platform that combines machine learning, deterministic evidence, service correlation, and root-cause analysis to help identify application failures faster.
 
-TraceRoot AI is an AI/ML-powered incident intelligence platform that analyzes application logs, detects anomalous events, correlates failures across services, and identifies the most likely root cause of an incident.
+## Features
 
-It combines **machine-learning anomaly detection**, **rule-based analysis**, **incident correlation**, and a **FastAPI backend** with a dark enterprise-style observability dashboard.
-
----
-
-## 🚀 What TraceRoot AI Does
-
-TraceRoot AI helps answer three key questions:
-
-> **What went wrong?**
-> **Which events are anomalous?**
-> **What service most likely caused the incident?**
-
-The platform processes application log events and provides:
-
-* Real-time anomaly prediction
-* ML-based anomaly detection
-* Rule-based anomaly detection
-* Incident analysis
-* Cross-service event correlation
-* Deterministic root-cause analysis
-* Historical event exploration
-* Backend health monitoring
-* API documentation through Swagger
-* Interactive observability dashboard
+* Machine-learning-based anomaly detection
+* Hybrid ML + rule-based anomaly prediction
+* Automated incident detection
+* Service-level event correlation
+* Evidence-based root-cause analysis
+* Interactive monitoring dashboard
+* Event search and filtering
+* API health monitoring
+* ML model health monitoring
+* REST API with Swagger/OpenAPI documentation
+* Dockerized FastAPI backend
+* Comprehensive automated test suite
 
 ---
 
-## ✨ Key Features
+## Architecture
 
-### 🔍 Anomaly Detection
+```text
+Application Logs
+       |
+       v
+Log Ingestion
+       |
+       v
+Preprocessing
+       |
+       v
+Feature Engineering
+       |
+       v
+ML Anomaly Detection
+       |
+       +--------------------+
+       |                    |
+       v                    v
+Rule-Based Detection    Incident Correlation
+       |                    |
+       +---------+----------+
+                 |
+                 v
+        Root-Cause Analysis
+                 |
+                 v
+          FastAPI Backend
+                 |
+                 v
+         TraceRoot Dashboard
+```
 
-Analyze an individual event using the trained anomaly detection model.
+---
 
-The detection engine uses features such as:
+## Machine Learning
+
+TraceRoot AI uses an Isolation Forest model for anomaly detection.
+
+The feature pipeline includes:
 
 * Severity
-* Error status
+* Error indicator
 * Service code
 * Message length
 * Time since previous event
@@ -48,135 +70,7 @@ The detection engine uses features such as:
 * Warnings in the last minute
 * Service error rate
 
-The system provides:
-
-* Final prediction
-* ML prediction
-* Rule prediction
-* Model output
-* Detection context
-
----
-
-### 🧠 Root-Cause Analysis
-
-TraceRoot AI analyzes stored incident evidence and identifies the service most likely responsible for the incident.
-
-The analysis considers:
-
-* Event chronology
-* Service-level failures
-* Error and warning counts
-* Critical events
-* First observed problem
-* Downstream service failures
-
-For the included sample incident, the analysis identifies:
-
-**database-service**
-
-as the earliest source of the failure chain.
-
----
-
-### 📋 Event Analyzer
-
-The Event Analyzer provides an interactive view of stored log events.
-
-Users can filter events by:
-
-* Search term
-* Service
-* Log level
-* Anomaly status
-
-The dashboard also supports anomaly-only analysis.
-
----
-
-### 📊 Incident Intelligence Dashboard
-
-The Overview dashboard provides a high-level operational view containing:
-
-* API status
-* ML model status
-* Gemini availability
-* Active incidents
-* Detected anomalies
-* Critical events
-* Affected services
-* Root-cause status
-
-All displayed dashboard metrics are retrieved from the backend rather than hard-coded into the UI.
-
----
-
-### 🔌 FastAPI Backend
-
-TraceRoot AI exposes a REST API for prediction, analysis, health monitoring, and dashboard data.
-
-Interactive API documentation is available through FastAPI Swagger.
-
----
-
-## 🏗️ Architecture
-
-```text
-                    ┌─────────────────────────┐
-                    │     Application Logs    │
-                    └────────────┬────────────┘
-                                 │
-                                 ▼
-                    ┌─────────────────────────┐
-                    │   Log Preprocessing     │
-                    │  Cleaning & Features    │
-                    └────────────┬────────────┘
-                                 │
-                                 ▼
-                    ┌─────────────────────────┐
-                    │   ML Anomaly Detection  │
-                    │     Isolation Forest    │
-                    └────────────┬────────────┘
-                                 │
-                         ┌───────┴────────┐
-                         ▼                ▼
-                ┌────────────────┐  ┌───────────────┐
-                │ Rule Detection  │  │ ML Prediction │
-                └────────┬───────┘  └───────┬───────┘
-                         │                  │
-                         └────────┬─────────┘
-                                  ▼
-                    ┌─────────────────────────┐
-                    │   Incident Correlation  │
-                    └────────────┬────────────┘
-                                 │
-                                 ▼
-                    ┌─────────────────────────┐
-                    │ Deterministic Root-Cause│
-                    │       Analysis          │
-                    └────────────┬────────────┘
-                                 │
-                                 ▼
-                    ┌─────────────────────────┐
-                    │       FastAPI API        │
-                    └────────────┬────────────┘
-                                 │
-                                 ▼
-                    ┌─────────────────────────┐
-                    │   TraceRoot AI Dashboard │
-                    │      HTML/CSS/JS         │
-                    └─────────────────────────┘
-```
-
----
-
-## 🤖 Machine Learning
-
-The anomaly detection component uses an **Isolation Forest** model.
-
-The current model is trained using engineered log-event features and is designed to identify unusual combinations of event characteristics.
-
-### Model
+The current sample model uses:
 
 ```text
 Algorithm: Isolation Forest
@@ -184,48 +78,80 @@ Contamination: 0.3
 Random State: 42
 ```
 
-The system also combines ML predictions with deterministic severity-based rules to provide a hybrid anomaly signal.
+The system also combines ML predictions with severity-based rules to provide hybrid anomaly detection.
 
 ---
 
-## 🛠️ Tech Stack
+## Sample Dataset
 
-### Backend
+The included sample dataset contains:
+
+* 20 analyzed log events
+* 11 detected anomalies
+* 1 critical event
+* 4 affected services
+* 2 recorded incidents
+
+The primary root cause identified from the stored incident evidence is:
+
+```text
+database-service
+```
+
+The analysis identifies the database service's earliest problem event before subsequent payment-service and API-gateway failures.
+
+---
+
+## Tech Stack
+
+### Programming
 
 * Python
-* FastAPI
-* Pydantic
-* Uvicorn
+* SQL
 
 ### Machine Learning
 
 * Scikit-learn
 * Isolation Forest
-* Joblib
+* Feature engineering
+* Anomaly detection
+
+### Backend
+
+* FastAPI
+* Uvicorn
+* Pydantic
+* REST API
+* Swagger / OpenAPI
+
+### Data Processing
+
 * Pandas
 * NumPy
+* JSON
+* CSV
 
 ### Frontend
 
-* HTML5
-* CSS3
+* HTML
+* CSS
 * JavaScript
-* REST API integration
 
-### Development
+### Development & Deployment
 
 * Git
 * GitHub
 * VS Code
-* Swagger / OpenAPI
+* Docker
+* Docker Desktop
 
 ---
 
-## 📁 Project Structure
+## Project Structure
 
 ```text
 traceroot-ai/
-│
+|
 ├── data/
 │   ├── raw/
 │   └── processed/
@@ -237,22 +163,23 @@ traceroot-ai/
 │   ├── ml/
 │   └── processing/
 │
+├── tests/
+│
 ├── ui/
 │   ├── index.html
 │   ├── styles.css
 │   └── app.js
 │
-├── tests/
-│
-├── run.py
 ├── Dockerfile
+├── .dockerignore
 ├── requirements.txt
+├── run.py
 └── README.md
 ```
 
 ---
 
-## ⚡ Getting Started
+## Getting Started
 
 ### 1. Clone the repository
 
@@ -316,7 +243,87 @@ http://localhost:5500
 
 ---
 
-## 🔗 API Endpoints
+## Docker Deployment
+
+### 6. Build the Docker image
+
+```powershell
+docker build -t traceroot-ai:latest .
+```
+
+### 7. Run the backend container
+
+```powershell
+docker run -d --name traceroot-ai-container -p 8000:8000 traceroot-ai:latest
+```
+
+Verify the running container:
+
+```powershell
+docker ps
+```
+
+Check the API health:
+
+```powershell
+curl.exe http://localhost:8000/health
+```
+
+A healthy response should include:
+
+```json
+{
+  "status": "healthy",
+  "api_running": true,
+  "model_available": true,
+  "model_loaded": true
+}
+```
+
+Swagger documentation:
+
+```text
+http://localhost:8000/docs
+```
+
+The Docker container runs the FastAPI backend on port `8000`.
+
+### 8. Run the dashboard with the Docker backend
+
+The frontend is a static HTML/CSS/JavaScript dashboard and can be served separately:
+
+```powershell
+cd ui
+python -m http.server 5500
+```
+
+Open:
+
+```text
+http://localhost:5500
+```
+
+The dashboard communicates with the Dockerized FastAPI backend at:
+
+```text
+http://localhost:8000
+```
+
+To stop the container:
+
+```powershell
+docker stop traceroot-ai-container
+```
+
+To remove the container:
+
+```powershell
+docker rm traceroot-ai-container
+```
+
+---
+
+## API Endpoints
 
 | Method | Endpoint                          | Purpose                      |
 | ------ | --------------------------------- | ---------------------------- |
@@ -332,7 +339,7 @@ http://localhost:5500
 
 ---
 
-## 🧪 Example Detection Request
+## Example Detection Request
 
 ```json
 {
@@ -359,66 +366,67 @@ Example response:
 
 ---
 
-## 📈 Sample Incident
+## Dashboard
 
-The included sample dataset contains:
-
-* **20** analyzed events
-* **11** detected anomalies
-* **1** critical event
-* **4** affected services
-* **2** recorded incidents
-
-The primary root cause identified from the stored incident evidence is:
-
-```text
-database-service
-```
-
-The analysis identifies the database service's earliest problem event before subsequent payment-service and API-gateway failures.
-
----
-
-## 🖥️ Dashboard Pages
-
-TraceRoot AI includes:
+TraceRoot AI includes an interactive dashboard with the following modules.
 
 ### Overview
 
-High-level incident and system intelligence.
+Provides a high-level view of:
+
+* System health
+* Active incidents
+* Detected anomalies
+* Critical events
+* Affected services
+* Root-cause information
 
 ### Detection
 
-Manual event anomaly prediction.
+Allows users to submit event features and perform anomaly prediction using the hybrid detection API.
 
 ### Root Cause
 
-Evidence-based incident root-cause analysis.
+Displays evidence-based incident analysis, including:
+
+* Root-cause service
+* Confidence
+* Timeline
+* Affected services
+* First problem event
+* Supporting evidence
 
 ### Event Analyzer
 
-Searchable and filterable event analysis.
+Provides searchable and filterable log event analysis.
 
 ### API
 
-Live backend endpoint information and Swagger access.
+Provides access to backend API information and Swagger documentation.
 
 ### System
 
-Backend, ML model, CORS, and artifact health monitoring.
+Displays:
+
+* Backend status
+* ML model status
+* Gemini availability
+* CORS status
+* Artifact readiness
 
 ---
 
-## ⚠️ Current Limitations
+## Current Limitations
 
 * The current project uses a sample log dataset.
 * The current root-cause explanation is deterministic and evidence-based.
 * Gemini-generated narrative output is not currently exposed by the backend dashboard API.
 * Production-scale distributed tracing and streaming ingestion are not yet implemented.
+* The current Docker deployment is intended for local/containerized demonstration rather than production hosting.
 
 ---
 
-## 🔮 Future Improvements
+## Future Improvements
 
 Potential future improvements include:
 
@@ -430,22 +438,49 @@ Potential future improvements include:
 * Transformer-based log representations
 * LLM-powered investigation summaries
 * Automated remediation suggestions
-* Dockerized deployment
 * Cloud deployment
 * Authentication and role-based access
 * Monitoring and evaluation dashboards
 
 ---
 
-## 🎯 Project Goal
+## Testing
 
-TraceRoot AI was built to explore how machine learning and intelligent incident analysis can reduce the time required to detect, investigate, and understand application failures.
+TraceRoot AI includes automated tests covering:
 
-The project focuses on combining **ML detection + deterministic evidence + service correlation** into one operational workflow.
+* API endpoint contracts
+* Model behavior
+* Integration behavior
+* Error handling
+* Input validation
+* Artifact availability
+* Artifact corruption
+* Pagination behavior
+* Response consistency
+* Deterministic predictions
+* Health checks
+
+Run the complete test suite with:
+
+```powershell
+python -m pytest -q
+```
 
 ---
 
-## 👩‍💻 Author
+## Project Goal
+
+TraceRoot AI was built to explore how machine learning and intelligent incident analysis can reduce the time required to detect, investigate, and understand application failures.
+
+The project combines:
+
+**ML detection + deterministic evidence + service correlation + API-driven investigation**
+
+into a single operational workflow.
+
+---
+
+## Author
 
 **Poojitha Dharmapuri**
 
