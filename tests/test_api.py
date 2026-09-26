@@ -224,3 +224,14 @@ def test_predict_rejects_invalid_payload():
     response = client.post("/predict", json=payload)
 
     assert response.status_code == 422
+
+
+def test_root_cause_response_fields():
+    response = client.post("/root-cause")
+
+    assert response.status_code == 200
+
+    body = response.json()
+
+    assert "deterministic_analysis" in body
+    assert "ai_analysis" in body
