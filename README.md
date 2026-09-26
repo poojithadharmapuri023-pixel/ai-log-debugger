@@ -236,13 +236,13 @@ python -m uvicorn src.api.main:app --reload --port 8000
 Backend:
 
 ```text
-http://localhost:8000
+https://traceroot-ai.onrender.com
 ```
 
 Swagger:
 
 ```text
-http://localhost:8000/docs
+https://traceroot-ai.onrender.com/docs
 ```
 
 ### 6. Start the dashboard
@@ -257,7 +257,7 @@ python -m http.server 5500
 Dashboard:
 
 ```text
-http://localhost:5500
+https://traceroot-ai-dashboard.onrender.com
 ```
 
 ## 🐳 Docker
