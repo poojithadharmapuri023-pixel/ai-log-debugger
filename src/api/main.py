@@ -1,4 +1,4 @@
-﻿
+
 from __future__ import annotations
 from src.ai.gemini_service import GeminiService
 import math
@@ -44,6 +44,7 @@ def _cors_origins() -> list[str]:
 
     return [
         # Frontend running with Python HTTP server
+        "https://traceroot-ai-dashboard.onrender.com",
         "http://localhost:5500",
         "http://127.0.0.1:5500",
 
@@ -687,3 +688,5 @@ def get_metrics() -> MetricsResponse:
             "not model evaluation metrics."
         ),
     )
+
+
