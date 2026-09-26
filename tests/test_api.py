@@ -248,3 +248,14 @@ def test_root_cause_analysis_content():
     assert body["deterministic_analysis"]
 
     assert body["ai_analysis"] is not None
+
+
+def test_root_response_fields():
+    response = client.get("/")
+
+    assert response.status_code == 200
+
+    body = response.json()
+
+    assert body["status"] == "success"
+    assert body["message"] == "AI Log Debugger API is running"
