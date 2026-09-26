@@ -108,3 +108,11 @@ def test_health_endpoint():
     assert isinstance(body, dict)
     assert body["status"] == "healthy"
     assert isinstance(body["status"], str)
+
+def test_health_status_is_healthy():
+    response = client.get("/health")
+
+    assert response.status_code == 200
+    body = response.json()
+
+    assert body.get("status") == "healthy"    
