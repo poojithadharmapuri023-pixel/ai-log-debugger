@@ -1,0 +1,356 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>TraceRoot AI — Incident Intelligence</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+
+<link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+
+<!-- ============================== LOADING SCREEN ============================== -->
+<div id="loading-screen" class="loading-screen">
+  <div class="bg-grid"></div>
+  <div class="bg-glow"></div>
+  <div class="loading-scan"></div>
+
+  <div class="loading-content">
+    <div class="loading-badge"><span class="pulse-dot"></span><span>SYSTEM BOOT</span></div>
+    <h1 class="loading-title">TraceRoot <span class="accent">AI</span></h1>
+    <p class="loading-subtitle">AI-POWERED INCIDENT INTELLIGENCE</p>
+
+    <div class="loading-progress-row">
+      <div class="loading-progress-track">
+        <div id="loading-progress-bar" class="loading-progress-bar"></div>
+      </div>
+      <span id="loading-percent" class="loading-percent">0%</span>
+    </div>
+    <div id="boot-stage" class="loading-stage">INITIALIZING INCIDENT INTELLIGENCE</div>
+  </div>
+</div>
+
+<!-- ============================== APP SHELL ============================== -->
+<div id="app" class="app">
+  <div class="bg-grid"></div>
+  <div class="bg-glow"></div>
+
+  <!-- ---------- SIDEBAR ---------- -->
+  <aside class="sidebar">
+    <div class="sidebar-logo">
+      <div class="logo-mark">TR</div>
+      <div class="logo-text">
+        <span class="logo-title">TRACEROOT</span>
+        <span class="logo-sub">AI OBSERVABILITY</span>
+      </div>
+    </div>
+
+    <nav class="sidebar-nav" id="sidebar-nav">
+      <button class="nav-item active" data-page="overview" type="button">Overview</button>
+      <button class="nav-item" data-page="detection" type="button">Detection</button>
+      <button class="nav-item" data-page="root-cause" type="button">Root Cause</button>
+      <button class="nav-item" data-page="event-analyzer" type="button">Event Analyzer</button>
+      <button class="nav-item" data-page="api" type="button">API</button>
+      <button class="nav-item" data-page="system" type="button">System</button>
+    </nav>
+
+    <div class="sidebar-status">
+      <div class="status-row" id="sb-api">
+        <span class="status-dot"></span><span class="status-name">API STATUS</span><span class="status-state">—</span>
+      </div>
+      <div class="status-row" id="sb-model">
+        <span class="status-dot"></span><span class="status-name">MODEL STATUS</span><span class="status-state">—</span>
+      </div>
+      <div class="status-row" id="sb-gemini">
+        <span class="status-dot"></span><span class="status-name">GEMINI STATUS</span><span class="status-state">—</span>
+      </div>
+    </div>
+  </aside>
+
+  <!-- ---------- MAIN ---------- -->
+  <div class="main">
+    <header class="topbar">
+      <div class="topbar-left">
+        <span class="topbar-title">TraceRoot AI</span>
+        <span class="topbar-sep">/</span>
+        <span id="topbar-section">Overview</span>
+      </div>
+      <div class="topbar-right">
+        <div class="topbar-status" id="tb-api"><span class="status-dot"></span><span>API</span></div>
+        <div class="topbar-status" id="tb-system"><span class="status-dot"></span><span>SYSTEM</span></div>
+        <button class="icon-btn" id="refresh-btn" type="button" title="Refresh status">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <polyline points="23 4 23 10 17 10"></polyline>
+            <polyline points="1 20 1 14 7 14"></polyline>
+            <path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"></path>
+          </svg>
+        </button>
+      </div>
+    </header>
+
+    <main class="content">
+
+      <!-- ================= OVERVIEW ================= -->
+      <section class="page active" data-page="overview" id="page-overview">
+        <div class="page-header">
+          <h1 class="page-title">Incident Intelligence</h1>
+          <p class="page-subtitle">Real-time anomaly detection and root-cause analysis</p>
+        </div>
+
+        <div class="metric-grid">
+          <div class="metric-card" style="animation-delay:0ms">
+            <div class="metric-card-top"><span class="metric-label">API STATUS</span><span class="pill neutral" id="ov-api-pill"><span class="status-dot"></span>—</span></div>
+            <div class="metric-value dim" id="ov-api-value">—</div>
+            <div class="metric-sub" id="ov-api-sub">Checking backend connection…</div>
+          </div>
+          <div class="metric-card" style="animation-delay:60ms">
+            <div class="metric-card-top"><span class="metric-label">ML MODEL</span><span class="pill neutral" id="ov-model-pill"><span class="status-dot"></span>—</span></div>
+            <div class="metric-value dim" id="ov-model-value">—</div>
+            <div class="metric-sub" id="ov-model-sub">Awaiting health check</div>
+          </div>
+          <div class="metric-card" style="animation-delay:120ms">
+            <div class="metric-card-top"><span class="metric-label">GEMINI AI</span><span class="pill neutral" id="ov-gemini-pill"><span class="status-dot"></span>—</span></div>
+            <div class="metric-value dim" id="ov-gemini-value">—</div>
+            <div class="metric-sub" id="ov-gemini-sub">—</div>
+          </div>
+          <div class="metric-card" style="animation-delay:180ms">
+            <div class="metric-card-top"><span class="metric-label">ACTIVE INCIDENTS</span></div>
+            <div class="metric-value dim" id="ov-incidents-value">—</div>
+            <div class="metric-sub" id="ov-incidents-sub">No data yet</div>
+          </div>
+        </div>
+
+        <div class="two-col">
+          <div class="panel">
+            <div class="panel-header"><span class="panel-title">Incident Summary</span></div>
+            <div class="panel-body">
+              <div class="kv-list" id="ov-summary-list">
+                <div class="kv-row"><span class="kv-key">Detected anomalies</span><span class="kv-val" id="ov-sum-anomalies">—</span></div>
+                <div class="kv-row"><span class="kv-key">Critical events</span><span class="kv-val" id="ov-sum-critical">—</span></div>
+                <div class="kv-row"><span class="kv-key">Services affected</span><span class="kv-val" id="ov-sum-services">—</span></div>
+                <div class="kv-row"><span class="kv-key">Root cause status</span><span class="kv-val" id="ov-sum-rootcause">—</span></div>
+              </div>
+            </div>
+          </div>
+
+          <div class="panel">
+            <div class="panel-header"><span class="panel-title">System Status</span></div>
+            <div class="panel-body">
+              <div class="kv-list">
+                <div class="kv-row"><span class="kv-key">API</span><span class="pill neutral" id="ov-sys-api"><span class="status-dot"></span>—</span></div>
+                <div class="kv-row"><span class="kv-key">MODEL</span><span class="pill neutral" id="ov-sys-model"><span class="status-dot"></span>—</span></div>
+                <div class="kv-row"><span class="kv-key">GEMINI</span><span class="pill neutral" id="ov-sys-gemini"><span class="status-dot"></span>—</span></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ================= DETECTION ================= -->
+      <section class="page" data-page="detection" id="page-detection">
+        <div class="page-header">
+          <h1 class="page-title">Anomaly Detection</h1>
+          <p class="page-subtitle">Analyze an event using the TraceRoot AI detection engine.</p>
+        </div>
+
+        <div class="panel">
+          <div class="panel-header"><span class="panel-title">Event Features</span></div>
+          <div class="panel-body">
+            <form id="detection-form">
+              <div class="form-grid">
+                <div class="field">
+                  <label for="f-severity">SEVERITY</label>
+                  <input type="number" id="f-severity" name="severity" step="1" value="0" required />
+                </div>
+                <div class="field">
+                  <label for="f-is-error">IS_ERROR</label>
+                  <select id="f-is-error" name="is_error">
+                    <option value="false">false</option>
+                    <option value="true">true</option>
+                  </select>
+                </div>
+                <div class="field">
+                  <label for="f-service-code">SERVICE_CODE</label>
+                  <input type="number" id="f-service-code" name="service_code" step="1" value="0" required />
+                </div>
+                <div class="field">
+                  <label for="f-message-length">MESSAGE_LENGTH</label>
+                  <input type="number" id="f-message-length" name="message_length" step="1" value="0" required />
+                </div>
+                <div class="field">
+                  <label for="f-time-since-previous">TIME_SINCE_PREVIOUS</label>
+                  <input type="number" id="f-time-since-previous" name="time_since_previous" step="any" value="0" required />
+                </div>
+                <div class="field">
+                  <label for="f-errors-last-min">ERRORS_IN_LAST_MINUTE</label>
+                  <input type="number" id="f-errors-last-min" name="errors_in_last_minute" step="1" value="0" required />
+                </div>
+                <div class="field">
+                  <label for="f-warnings-last-min">WARNINGS_IN_LAST_MINUTE</label>
+                  <input type="number" id="f-warnings-last-min" name="warnings_in_last_minute" step="1" value="0" required />
+                </div>
+                <div class="field">
+                  <label for="f-service-error-rate">SERVICE_ERROR_RATE</label>
+                  <input type="number" id="f-service-error-rate" name="service_error_rate" step="any" value="0" required />
+                </div>
+              </div>
+              <div class="btn-row">
+                <button type="submit" class="btn" id="run-detection-btn">RUN DETECTION</button>
+                <span id="detection-status" class="metric-sub"></span>
+              </div>
+            </form>
+
+            <div id="detection-result-wrap"></div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ================= ROOT CAUSE ================= -->
+      <section class="page" data-page="root-cause" id="page-root-cause">
+        <div class="page-header">
+          <h1 class="page-title">Root Cause Analysis</h1>
+          <p class="page-subtitle">Deterministic root-cause analysis from stored incident evidence.</p>
+        </div>
+
+        <div class="btn-row" style="margin-bottom:18px;">
+          <button class="btn" id="run-rootcause-btn" type="button">RUN ANALYSIS</button>
+          <span id="rootcause-status" class="metric-sub"></span>
+        </div>
+
+        <div id="rootcause-content">
+          <div class="panel"><div class="empty-state"><span class="empty-icon">—</span>No analysis loaded yet. Click "Run Analysis".</div></div>
+        </div>
+      </section>
+
+      <!-- ================= EVENT ANALYZER ================= -->
+      <section class="page" data-page="event-analyzer" id="page-event-analyzer">
+        <div class="page-header">
+          <h1 class="page-title">Event Analyzer</h1>
+          <p class="page-subtitle">Browse and search stored log events from the analysis engine.</p>
+        </div>
+
+        <div class="panel" style="margin-bottom:20px;">
+          <div class="panel-body">
+            <form id="event-filter-form">
+              <div class="form-grid">
+                <div class="field">
+                  <label for="ea-search">SEARCH</label>
+                  <input type="text" id="ea-search" placeholder="message, service, level…" />
+                </div>
+                <div class="field">
+                  <label for="ea-service">SERVICE</label>
+                  <input type="text" id="ea-service" placeholder="exact service name" />
+                </div>
+                <div class="field">
+                  <label for="ea-level">LEVEL</label>
+                  <select id="ea-level">
+                    <option value="">any</option>
+                    <option value="INFO">INFO</option>
+                    <option value="WARNING">WARNING</option>
+                    <option value="ERROR">ERROR</option>
+                    <option value="CRITICAL">CRITICAL</option>
+                  </select>
+                </div>
+                <div class="field">
+                  <label for="ea-anomaly-only">ANOMALIES ONLY</label>
+                  <select id="ea-anomaly-only">
+                    <option value="false">false</option>
+                    <option value="true">true</option>
+                  </select>
+                </div>
+              </div>
+              <div class="btn-row">
+                <button type="submit" class="btn" id="run-event-search-btn">SEARCH EVENTS</button>
+                <span id="event-search-status" class="metric-sub"></span>
+              </div>
+            </form>
+          </div>
+        </div>
+
+        <div class="panel">
+          <div class="log-table-wrap">
+            <table class="log-table">
+              <thead>
+                <tr>
+                  <th>TIMESTAMP</th>
+                  <th>SERVICE</th>
+                  <th>LEVEL</th>
+                  <th>MESSAGE</th>
+                  <th>ANOMALY</th>
+                </tr>
+              </thead>
+              <tbody id="event-table-body">
+                <tr><td colspan="5" style="text-align:center;color:var(--text-low);padding:24px;">Run a search to load events.</td></tr>
+              </tbody>
+            </table>
+          </div>
+          <div class="pagination" id="event-pagination"></div>
+        </div>
+      </section>
+
+      <!-- ================= API ================= -->
+      <section class="page" data-page="api" id="page-api">
+        <div class="page-header">
+          <h1 class="page-title">API</h1>
+          <p class="page-subtitle">Live endpoints exposed by the TraceRoot AI backend.</p>
+        </div>
+
+        <div class="btn-row" style="margin-bottom:18px;">
+          <button class="btn" id="open-swagger-btn" type="button">OPEN SWAGGER</button>
+          <span class="metric-sub">http://127.0.0.1:8000/docs</span>
+        </div>
+
+        <div class="panel">
+          <div class="panel-header"><span class="panel-title">Endpoints</span><span class="metric-sub" id="api-overall-status">—</span></div>
+          <div class="endpoint-list" id="endpoint-list"></div>
+        </div>
+      </section>
+
+      <!-- ================= SYSTEM ================= -->
+      <section class="page" data-page="system" id="page-system">
+        <div class="page-header">
+          <h1 class="page-title">System</h1>
+          <p class="page-subtitle">Backend connection and dependency health.</p>
+        </div>
+
+        <div class="btn-row" style="margin-bottom:18px;">
+          <button class="btn" id="refresh-system-btn" type="button">REFRESH STATUS</button>
+          <span id="system-status-note" class="metric-sub"></span>
+        </div>
+
+        <div class="panel">
+          <div class="conn-row"><span class="conn-label">API Connection</span><span class="conn-value">http://localhost:8000</span></div>
+          <div class="conn-row"><span class="conn-label">Backend</span><span class="pill neutral" id="sys-backend"><span class="status-dot"></span>—</span></div>
+          <div class="conn-row"><span class="conn-label">ML Model</span><span class="pill neutral" id="sys-model"><span class="status-dot"></span>—</span></div>
+          <div class="conn-row"><span class="conn-label">Gemini</span><span class="pill neutral" id="sys-gemini"><span class="status-dot"></span>—</span></div>
+          <div class="conn-row"><span class="conn-label">CORS</span><span class="pill neutral" id="sys-cors"><span class="status-dot"></span>—</span></div>
+        </div>
+
+        <div class="panel" style="margin-top:20px;">
+          <div class="panel-header"><span class="panel-title">Dashboard Artifacts</span></div>
+          <div class="panel-body">
+            <div class="kv-list" id="sys-artifacts-list">
+              <div class="empty-state"><span class="empty-icon">—</span>No data yet.</div>
+            </div>
+          </div>
+        </div>
+
+        <p class="metric-sub" style="margin-top:20px;max-width:640px;">
+          This console only talks to the backend URL configured above. It never crashes on a missing
+          element or an unreachable endpoint — it reports the honest state instead.
+        </p>
+      </section>
+
+    </main>
+  </div>
+</div>
+
+<div id="toast-container" class="toast-container"></div>
+
+<script src="app.js"></script>
+</body>
+</html>
