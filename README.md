@@ -16,6 +16,19 @@ TraceRoot AI analyzes application logs to detect anomalous events, identify affe
 * 🐳 **Docker deployment support**
 * 📖 **Swagger and ReDoc API documentation**
 
+
+## 📸 Dashboard Preview
+
+### Main Dashboard
+![TraceRoot AI Dashboard](screenshots/dashboard.png)
+
+### Anomaly Detection
+![Anomaly Detection](screenshots/anomalies.png)
+
+### Root-Cause Analysis
+![Root-Cause Analysis](screenshots/root-cause.png)
+
+
 ## 🏗️ Architecture
 
 ```text
