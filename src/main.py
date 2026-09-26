@@ -65,6 +65,9 @@ app = FastAPI(
         "name": "TraceRoot AI",
         "url": "https://github.com/poojithadharmapuri023-pixel/traceroot-ai",
     },
+    license_info={
+        "name": "MIT License",
+    },
     openapi_tags=[
         {
             "name": "Service",
