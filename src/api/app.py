@@ -1,3 +1,4 @@
+
 from pathlib import Path
 
 import joblib
@@ -17,6 +18,22 @@ app = FastAPI(
     title="AI Log Debugger API",
     description="API for anomaly detection and AI-powered root-cause analysis.",
     version="1.0.0",
+    openapi_tags=[
+        {
+            "name": "Service",
+            "description": "Health and service readiness endpoints.",
+        },
+        {
+            "name": "Predictions",
+            "description": "Machine-learning anomaly prediction endpoints.",
+        },
+        {
+            "name": "Analysis results",
+            "description": (
+                "Stored anomaly, incident, root-cause, and metrics data."
+            ),
+        },
+    ],
 )
 
 model = joblib.load(MODEL_PATH)
@@ -53,7 +70,6 @@ def health():
 
 @app.post("/predict")
 def predict(log: LogFeatures):
-
     input_data = pd.DataFrame([log.model_dump()])
 
     feature_columns = [
@@ -80,7 +96,9 @@ def predict(log: LogFeatures):
 
     ml_anomaly = int(prediction_value == -1)
     rule_anomaly = int(log.severity >= 1)
-    final_anomaly = int(ml_anomaly == 1 or rule_anomaly == 1)
+    final_anomaly = int(
+        ml_anomaly == 1 or rule_anomaly == 1
+    )
 
     prediction = "Anomaly" if final_anomaly else "Normal"
 
@@ -96,9 +114,9 @@ def predict(log: LogFeatures):
 
 @app.post("/root-cause")
 def root_cause():
-
     try:
         deterministic_analysis = analyze_root_cause()
+
         gemini_analysis = gemini_service.explain_root_cause(
             deterministic_analysis
         )

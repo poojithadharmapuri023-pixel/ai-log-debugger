@@ -136,3 +136,18 @@ def test_redoc_endpoint():
 
     assert response.status_code == 200
     assert "text/html" in response.headers["content-type"]
+
+def test_openapi_contains_api_tags():
+    response = client.get("/openapi.json")
+
+    assert response.status_code == 200
+
+    body = response.json()
+    tags = {
+        item["name"]: item["description"]
+        for item in body.get("tags", [])
+    }
+
+    assert "Service" in tags
+    assert "Predictions" in tags
+    assert "Analysis results" in tags    
