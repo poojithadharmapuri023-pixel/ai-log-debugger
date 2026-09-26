@@ -1,7 +1,6 @@
-﻿"""FastAPI application for read-only inference and dashboard data access."""
-
+﻿
 from __future__ import annotations
-
+from src.ai.gemini_service import GeminiService
 import math
 import os
 from collections import Counter
@@ -82,7 +81,7 @@ app.add_middleware(
 # Starting the API never trains a model or regenerates analysis outputs.
 model_service = ModelService()
 artifact_service = ArtifactService()
-
+gemini_service = GeminiService()
 
 @app.exception_handler(ArtifactNotFoundError)
 async def artifact_not_found_handler(
@@ -325,13 +324,13 @@ def health(response: Response) -> HealthResponse:
         response.status_code = 503
 
     return HealthResponse(
-        status="healthy" if healthy else "degraded",
-        model_available=model_available,
-        model_loadable=model_loadable,
-        model_loaded=model_service.is_loaded,
-        dashboard_artifacts=artifacts,
-    )
-
+    status="healthy" if healthy else "degraded",
+    model_available=model_available,
+    model_loadable=model_loadable,
+    model_loaded=model_service.is_loaded,
+    gemini_available=gemini_service.available,
+    dashboard_artifacts=artifacts,
+)
 
 @app.post(
     "/predict",

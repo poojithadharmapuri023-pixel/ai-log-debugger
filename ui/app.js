@@ -620,7 +620,10 @@
       reason: analysis.reason || analysis.explanation || null,
       serviceScores: analysis.service_scores || {},
       geminiExplanation: analysis.gemini_explanation || analysis.gemini || null,
-      geminiAvailable: analysis.gemini_available,
+      geminiAvailable:
+      analysis.gemini_available !== undefined
+      ? analysis.gemini_available
+      : null,
     };
   }
 

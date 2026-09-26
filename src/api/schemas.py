@@ -1,3 +1,4 @@
+
 """Explicit request and response schemas for the FastAPI application."""
 
 from __future__ import annotations
@@ -10,14 +11,41 @@ from pydantic import BaseModel, ConfigDict, Field
 class LogFeatures(BaseModel):
     """The eight engineered features required by the stored model."""
 
-    severity: int = Field(ge=0, le=3, description="INFO=0, WARNING=1, ERROR=2, CRITICAL=3.")
-    is_error: int = Field(ge=0, le=1, description="1 for ERROR/CRITICAL, otherwise 0.")
-    service_code: int = Field(ge=0, description="Service code from the training feature mapping.")
-    message_length: int = Field(ge=0, description="Character length of the log message.")
-    time_since_previous: float = Field(ge=0, description="Seconds since the prior log event.")
-    errors_in_last_minute: int = Field(ge=0, description="Prior error count in this log minute.")
-    warnings_in_last_minute: int = Field(ge=0, description="Prior warning count in this log minute.")
-    service_error_rate: float = Field(ge=0, le=1, description="Observed service error rate.")
+    severity: int = Field(
+        ge=0,
+        le=3,
+        description="INFO=0, WARNING=1, ERROR=2, CRITICAL=3.",
+    )
+    is_error: int = Field(
+        ge=0,
+        le=1,
+        description="1 for ERROR/CRITICAL, otherwise 0.",
+    )
+    service_code: int = Field(
+        ge=0,
+        description="Service code from the training feature mapping.",
+    )
+    message_length: int = Field(
+        ge=0,
+        description="Character length of the log message.",
+    )
+    time_since_previous: float = Field(
+        ge=0,
+        description="Seconds since the prior log event.",
+    )
+    errors_in_last_minute: int = Field(
+        ge=0,
+        description="Prior error count in this log minute.",
+    )
+    warnings_in_last_minute: int = Field(
+        ge=0,
+        description="Prior warning count in this log minute.",
+    )
+    service_error_rate: float = Field(
+        ge=0,
+        le=1,
+        description="Observed service error rate.",
+    )
 
 
 class LegacyPredictionResponse(BaseModel):
@@ -45,10 +73,17 @@ class ArtifactReadiness(BaseModel):
 
 class HealthResponse(BaseModel):
     status: Literal["healthy", "degraded"]
+
     api_running: bool = True
+
     model_available: bool
+
     model_loadable: bool
+
     model_loaded: bool
+
+    gemini_available: bool
+
     dashboard_artifacts: dict[str, ArtifactReadiness]
 
 
@@ -135,7 +170,9 @@ class RootCauseAnalysis(BaseModel):
     first_problem_level: str | None = None
     first_problem_message: str | None = None
     reason: str | None = None
-    service_scores: dict[str, dict[str, int | str]] = Field(default_factory=dict)
+    service_scores: dict[str, dict[str, int | str]] = Field(
+        default_factory=dict
+    )
 
 
 class RootCauseAnalysisResponse(BaseModel):
