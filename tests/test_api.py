@@ -281,3 +281,20 @@ def test_predict_normal_severity_response():
     assert body["severity"] == 0
     assert body["rule_prediction"] == "Normal"
     assert body["prediction"] in {"Normal", "Anomaly"}
+
+
+def test_predict_rejects_invalid_field_type():
+    payload = {
+        "severity": "critical",
+        "is_error": 1,
+        "service_code": 2,
+        "message_length": 45,
+        "time_since_previous": 10.0,
+        "errors_in_last_minute": 3,
+        "warnings_in_last_minute": 1,
+        "service_error_rate": 0.5,
+    }
+
+    response = client.post("/predict", json=payload)
+
+    assert response.status_code == 422
