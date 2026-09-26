@@ -107,3 +107,4 @@ def test_health_endpoint():
 
     assert isinstance(body, dict)
     assert body["status"] == "healthy"
+    assert isinstance(body["status"], str)
