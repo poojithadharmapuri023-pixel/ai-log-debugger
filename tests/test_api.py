@@ -87,3 +87,14 @@ def test_root_endpoint():
     assert isinstance(body["message"], str)
     assert body["message"]
 
+def test_openapi_documentation():
+    response = client.get("/openapi.json")
+
+    assert response.status_code == 200
+
+    body = response.json()
+
+    assert body["info"]["title"] == "AI Log Debugger API"
+    assert body["info"]["version"] == "1.0.0"
+    assert "/health" in body["paths"]    
+
