@@ -61,6 +61,10 @@ app = FastAPI(
     title="AI Log Debugger",
     description="Read-only log anomaly prediction and processed dashboard-data API.",
     version="0.3.0",
+    contact={
+        "name": "TraceRoot AI",
+        "url": "https://github.com/poojithadharmapuri023-pixel/traceroot-ai",
+    },
 )
 
 app.add_middleware(
@@ -139,6 +143,7 @@ def _model_prediction(features: LogFeatures) -> int:
             status_code=500,
             detail="Unexpected error while generating model prediction",
         ) from error
+
 
 def _is_ml_anomaly(record: dict[str, Any]) -> bool:
     if "predicted_anomaly" in record:
