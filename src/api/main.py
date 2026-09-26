@@ -57,9 +57,15 @@ def _cors_origins() -> list[str]:
 
 
 app = FastAPI(
-    title="AI Log Debugger",
-    description="Read-only log anomaly prediction and processed dashboard-data API.",
-    version="0.3.0",
+    title="TraceRoot AI API",
+    description=(
+        "AI-powered log anomaly detection and root-cause analysis API "
+        "for investigating service incidents and operational failures."
+    ),
+    version="1.0.0",
+    docs_url="/docs",
+    redoc_url="/redoc",
+    openapi_url="/openapi.json",
 )
 
 # Allow the TraceRoot AI frontend to communicate with the FastAPI backend.
