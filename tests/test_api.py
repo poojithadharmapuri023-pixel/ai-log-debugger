@@ -163,3 +163,17 @@ def test_openapi_contains_expected_endpoints():
     assert "/health" in paths
     assert "/predict" in paths
     assert "/root-cause" in paths
+
+def test_health_response_fields():
+    response = client.get("/health")
+
+    assert response.status_code == 200
+
+    body = response.json()
+
+    assert "status" in body
+    assert "model_loaded" in body
+    assert "gemini_available" in body
+
+    assert body["status"] == "healthy"
+    assert body["model_loaded"] is True
