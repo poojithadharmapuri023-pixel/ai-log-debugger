@@ -65,6 +65,20 @@ app = FastAPI(
         "name": "TraceRoot AI",
         "url": "https://github.com/poojithadharmapuri023-pixel/traceroot-ai",
     },
+    openapi_tags=[
+        {
+            "name": "Service",
+            "description": "Health and service readiness endpoints.",
+        },
+        {
+            "name": "Predictions",
+            "description": "Machine-learning anomaly prediction endpoints.",
+        },
+        {
+            "name": "Analysis results",
+            "description": "Stored anomaly, incident, root-cause, and metrics data.",
+        },
+    ],
 )
 
 app.add_middleware(
