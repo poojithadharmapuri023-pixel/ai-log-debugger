@@ -1,4 +1,4 @@
-"""FastAPI application for read-only inference and dashboard data access."""
+﻿"""FastAPI application for read-only inference and dashboard data access."""
 
 from __future__ import annotations
 
@@ -103,10 +103,17 @@ async def artifact_read_error_handler(
 def _model_prediction(features: LogFeatures) -> int:
     try:
         return model_service.predict(features.model_dump())
+
     except ModelServiceError as error:
         raise HTTPException(
             status_code=503,
             detail=str(error),
+        ) from error
+
+    except Exception as error:
+        raise HTTPException(
+            status_code=500,
+            detail="Unexpected error while generating model prediction",
         ) from error
 
 
