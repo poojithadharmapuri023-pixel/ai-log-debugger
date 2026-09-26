@@ -177,3 +177,33 @@ def test_health_response_fields():
 
     assert body["status"] == "healthy"
     assert body["model_loaded"] is True
+
+
+def test_predict_response_fields():
+    payload = {
+        "severity": 2,
+        "is_error": 1,
+        "service_code": 2,
+        "message_length": 45,
+        "time_since_previous": 10.0,
+        "errors_in_last_minute": 3,
+        "warnings_in_last_minute": 1,
+        "service_error_rate": 0.5,
+    }
+
+    response = client.post("/predict", json=payload)
+
+    assert response.status_code == 200
+
+    body = response.json()
+
+    assert "prediction" in body
+    assert "severity" in body
+    assert "ml_prediction" in body
+    assert "rule_prediction" in body
+    assert "model_output" in body
+    assert "message" in body
+
+    assert body["prediction"] in {"Anomaly", "Normal"}
+    assert body["ml_prediction"] in {"Anomaly", "Normal"}
+    assert body["rule_prediction"] in {"Anomaly", "Normal"}
