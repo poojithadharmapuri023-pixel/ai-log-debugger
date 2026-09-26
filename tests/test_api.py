@@ -84,4 +84,6 @@ def test_root_endpoint():
 
     assert isinstance(body, dict)
     assert "message" in body
+    assert isinstance(body["message"], str)
+    assert body["message"]
 
