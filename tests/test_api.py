@@ -150,4 +150,16 @@ def test_openapi_contains_api_tags():
 
     assert "Service" in tags
     assert "Predictions" in tags
-    assert "Analysis results" in tags    
+    assert "Analysis results" in tags  
+
+def test_openapi_contains_expected_endpoints():
+    response = client.get("/openapi.json")
+
+    assert response.status_code == 200
+
+    paths = response.json()["paths"]
+
+    assert "/" in paths
+    assert "/health" in paths
+    assert "/predict" in paths
+    assert "/root-cause" in paths
